@@ -1,0 +1,70 @@
+<div class="d-flex flex-column min-vh-100">
+  <div id="sidebar" [class.active]="isSidebarActive">
+    <div class="d-flex flex-column flex-shrink-0 p-3 text-white colorset vh-100">
+
+      <!-- Logo Section with White Background -->
+      <div class="d-flex align-items-center justify-content-center bg-white p-1 logoside">
+        <a routerLink="/dashboard" class="text-decoration-none d-flex align-items-center">
+          <img src="../assets/image/iot.png" class="imageLogo me-2" alt="IoT Logo">
+          <span class="h3 fw-bolder text-dark mt-2">Monitor</span>
+        </a>
+      </div>
+
+
+
+      <!-- Navigation Links -->
+      <ul class="nav flex-column mt-5">
+        <li class="nav-item mb-3 navbarHover">
+          <a routerLink="/dashboard" routerLinkActive="active" class="nav-link text-white">
+            <i class="fa-solid fa-house px-2"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item mb-3 navbarHover">
+          <a routerLink="/device" class="nav-link text-white" routerLinkActive="active">
+            <i class="fa-solid fa-microchip px-2"></i> Manage Devices
+          </a>
+        </li>
+        <li class="nav-item mb-3 navbarHover">
+          <a routerLink="/report" class="nav-link text-white" routerLinkActive="active">
+            <i class="fa-solid fa-file-lines px-2"></i> Generate Reports
+          </a>
+        </li>
+        <li class="nav-item mb-3 navbarHover">
+          <a routerLink="#" class="nav-link text-white" (click)="logoutUser()" routerLinkActive="active">
+            <i class="fa-solid fa-right-from-bracket px-2"></i> LogOut
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- toggle button -->
+  <div id="page-content-wrapper" [class.sidebar-active]="isSidebarActive">
+    <div class="toggle-container colorset">
+      <div class="d-flex justify-content-between w-100">
+        <!-- Sidebar Toggle Button (Left Side) -->
+        <button id="toggleSidebar" (click)="toggleSidebar()">
+          <i class="fa-solid fa-bars "></i>
+        </button>
+    
+        <!-- User Info (Right Side) -->
+        <div class="d-flex align-items-center mx-3 rounded-pill userProfile">
+          <span *ngIf="loggedUser" class="fw-bold p-1"> <i class="fa-solid fa-user rounded-circle bg-light text-dark p-2 me-2"></i>{{ loggedUser.first_name }} {{ loggedUser.last_name }}</span>
+          <span *ngIf="!loggedUser" class="fw-bold">Guest</span>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="container-fluid main">
+      <div class="row">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-end py-1 px-4 mt-auto w-100 fixed-bottom">
+    <p class="mb-0 text-dark">IoT Monitoring System &copy; 2025</p>
+  </footer>
+</div>

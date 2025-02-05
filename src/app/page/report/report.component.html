@@ -1,0 +1,95 @@
+<div class="container mt-2">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="card rounded-3 mt-3">
+        <div class="card-header bg-dark-subtle">
+          <h5 class="fw-bold">Generate Report</h5>
+        </div>
+        <div class="card-body mx-5">
+          <form (ngSubmit)="generateReport()">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="deviceName" class="form-label">Select Device Name</label>
+                  <select [(ngModel)]="selectedDeviceName" name="deviceName" id="deviceName" class="form-select"
+                    required>
+                    <option value="" selected hidden>Select Device Name</option>
+                    <option *ngFor="let device of devices" [value]="device.name">{{ device.name }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <div class="form-group">
+                  <label for="dateRange" class="form-label">Select Device Range</label>
+                  <select [(ngModel)]="dateRange" name="dateRange" id="dateRange" class="form-select" required>
+                    <option value="" selected hidden>Select Date Range</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-2 mb-3 d-flex align-items-end justify-content-center">
+                <button type="submit" class="btn btn-secondary w-100">Generate Report</button>
+              </div>
+            </div>
+            <!-- Download Buttons (Hidden Initially) -->
+            <div class="text-end" *ngIf="reportGenerated">
+              <button class="btn btn-primary mx-2" (click)="downloadReport('csv')">Download CSV</button>
+              <button class="btn btn-primary mx-2" (click)="downloadReport('pdf')">Download PDF</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card" *ngIf="selectedDevice">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12 d-flex justify-content-around">
+              <ul>
+                <li class="mb-1"><span class="fw-bold">Device Name :</span> {{ selectedDevice.name }}</li>
+                <li class="mb-1"><span class="fw-bold">Device Type :</span> {{ selectedDevice.type }}</li>
+                <li class="mb-0"><span class="fw-bold">Last Reading :</span> {{ selectedDevice.last_reading?.value || 'N/A' }} </li>
+              </ul>
+              <ul>
+                <li class="mb-1"><span class="fw-bold">Created At :</span> {{ selectedDevice.created_at | date: 'MMM. d, y, h:mm a' }}</li>
+                <li class="mb-0"><span class="fw-bold">Updated At :</span> {{ selectedDevice.updated_at | date: 'MMM. d, y, h:mm:ss a' }} </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sensor Data Report Table -->
+    <div class="col-12 mt-4" *ngIf="reportData.length > 0">
+      <div class="table-responsive rounded-3">
+        <table class="table table-bordered text-center table-hover">
+          <thead class="table-secondary">
+            <tr>
+              <th>Sr.no</th>
+              <th>Timestamp</th>
+              <th>Device name</th>
+              <th>Device type</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of reportData; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ data.timestamp | date: 'MMM. d, y, h:mm a' }}</td>
+              <td>{{ selectedDevice?.name }}</td>
+              <td>{{ selectedDevice?.type }}</td>
+              <td>{{ data.value }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>

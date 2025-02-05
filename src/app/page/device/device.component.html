@@ -1,0 +1,87 @@
+<div class="container mt-2">
+  <!-- Add/Update Device Form -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card rounded-3">
+        <!-- Card Header -->
+        <div class="card-header bg-dark-subtle d-flex justify-content-between align-items-center">
+          <h5 class="fw-bold">{{ currentDeviceId ? 'Edit' : 'Add' }} Device</h5>
+          <button *ngIf="currentDeviceId" type="button" class="btn btn-secondary" (click)="clearForm()">
+            <i class="fa-solid fa-arrow-left me-2"></i>Back
+          </button>
+        </div>
+  
+        <!-- Card Body -->
+        <div class="card-body">
+          <form (ngSubmit)="addOrUpdateDevice()" class="row g-3 mx-5">
+            <!-- Device Name Input -->
+            <div class="col-12 col-md-6 col-lg-3">
+              <label for="deviceName" class="form-label">Device Name</label>
+              <input type="text" [(ngModel)]="deviceName" class="form-control" id="deviceName" name="deviceName"
+                placeholder="Enter Device Name" required>
+            </div>
+
+            <!-- Device Type Selection -->
+            <div class="col-12 col-md-6 col-lg-3">
+              <label for="type" class="form-label">Device Type</label>
+              <select [(ngModel)]="deviceType" class="form-select" id="type" name="type" required>
+                <option value="" disabled selected hidden>Select Device Type</option>
+                <option value="Temperature Sensor">Temperature Sensor</option>
+                <option value="Humidity Sensor">Humidity Sensor</option>
+                <option value="Motion Sensor">Motion Sensor</option>
+              </select>
+            </div>
+  
+            <!-- Button Section: Right Aligned -->
+            <div class="col-md-3 mb-3 d-flex  mt-5 gap-2 d-flex justify-content-end">
+              <button type="submit" class="btn btn-secondary w-100" [disabled]="!deviceName || !deviceType">{{ currentDeviceId ? 'Update' : 'Add' }} Device</button>
+              <button type="button" class="btn btn-success w-50" (click)="clearForm()">Clear</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+
+  <!-- Device Table -->
+  <h4 class="fw-bold text-center m-3">Device List</h4>
+  <div class="table-responsive rounded-3 border-3">
+    <table class="table table-bordered table-hover text-center">
+      <thead class="table-secondary">
+        <tr>
+          <th>Id</th>
+          <th>Device Name</th>
+          <th>Device Type</th>
+          <th>Status</th>
+          <th class="w-25">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let device of devices">
+          <td>{{ device.id }}</td>
+          <td>{{ device.name }}</td>
+          <td>{{ device.type }}</td>
+          <td>{{ device.status }}</td>
+          <td class="w-25">
+            <button class="btn"
+              [ngClass]="{ 'text-success': device.status === 'Inactive', 'text-danger': device.status === 'Active' }"
+              (click)="toggleState(device)">
+              <i class="fa-solid fa-xl"
+                [ngClass]="{ 'fa-play': device.status === 'Inactive', 'fa-pause': device.status === 'Active' }"></i>
+            </button>
+            |
+            <button class="btn text-primary" (click)="editDevice(device.id!)">
+              <i class="fa-solid fa-pen-to-square fa-xl"></i>
+            </button>
+            |
+            <button class="btn text-danger" *ngIf="device.id" (click)="deleteDevice(device.id)">
+              <i class="fa-solid fa-trash fa-xl"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

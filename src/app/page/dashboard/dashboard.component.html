@@ -1,0 +1,119 @@
+<div class="container">
+    <div class="row">
+        <!-- Date & Time -->
+        <div class="col-12 text-end mt-2">
+            <strong>{{ currentDate }}</strong> | <span class="text-primary">{{ currentTime }}</span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-6 mb-2">
+            <div class="card h-100">
+                <div class="card-body flex-column justify-content-between">
+                    <div class="d-flex gap-3">
+                        <select class="form-select" [(ngModel)]="selectedDevice">
+                            <option *ngFor="let device of devices" [value]="device.name">{{ device.name }}</option>
+                        </select>
+                        <select class="form-select" [(ngModel)]="dateRange">
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-secondary w-100" (click)="fetchData()">Generate Chart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Device -->
+        <div class="col-12 col-md-3 mb-2">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <p class="card-title">Total Devices</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span><i class="fa-solid fa-microchip fa-xl"></i></span>
+                        <h3 class="mb-0 fw-bold">{{ totalDevices }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Reports -->
+        <div class="col-12 col-md-3 mb-2">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <p class="card-title">Total Sensore Data</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span><i class="fa-solid fa-file-alt fa-xl"></i></span>
+                        <h3 class="mb-0 fw-bold">{{ totalSensore }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- chart & data  -->
+    <div class="row">
+        <!-- Chart Section -->
+        <div class="col-12 col-md-9 mt-3">
+            <div class="card p-2 h-100">
+                <h5 class="fw-bold mx-2">Device Data</h5>
+                <!-- Chart Canvas -->
+                <canvas id="chartCanvas"></canvas>
+            </div>
+        </div>
+
+        <!-- Device Status Card -->
+        <div class="col-12 col-md-3 mt-3">
+            <div class="card pre-scrollable p-3 h-100">
+                <h5 class="fw-bold">Device Status</h5>
+                <div class="list-group list-group-flush">
+                    <div *ngFor="let device of devices"
+                        class="list-group-item d-flex justify-content-between align-items-center"
+                        style="cursor: pointer;">
+                        <!-- Show dot if the device is selected -->
+                        <span>
+                            {{ device.name }}
+                            <span *ngIf="selectedDevice === device.name" class="text-primary fw-bold mx-2">
+                                <i class="fa-regular fa-circle-dot text-success"></i></span>
+                        </span>
+                        <!-- Device Status Badge -->
+                        <span class="badge w-25"
+                            [ngClass]="{'bg-success': device.status === 'Active', 'bg-danger': device.status === 'Inactive'}">
+                            {{ device.status }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 mb-5">
+        <div class="col-12">
+            <h4 class="fw-bold">Device Datas</h4>
+            <div class="table-responsive rounded-3 border"
+                style="max-height: 300px; overflow-y: auto; position: relative;">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-secondary table-sticky">
+                        <tr>
+                            <th>Device Name</th>
+                            <th>Device Type</th>
+                            <th>Device Value</th>
+                            <th>Time Stamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let entry of sensorData; let i = index">
+                            <td>{{ selectedDevice }}</td>
+                            <td>{{ entry.type }}</td>
+                            <td>{{ entry.value }}</td>
+                            <td>{{ entry.timestamp | date: 'MMM d, y, h:mm:ss a' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,119 @@
+.navbarHover .nav-link {
+  transition: background-color 0.3s, transform 0.2s;
+  padding: 10px 15px;
+  border-radius: 5px;
+  width: 200px;
+}
+
+.navbarHover .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.navbarHover .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.3);
+  font-weight: bold;
+}
+
+/* Responsive Hover for Mobile */
+/* @media (max-width: 768px) {
+  .navbarHover .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: none;
+  }
+} */
+
+.logoside {
+  margin: -16px;
+}
+
+.userProfile {
+  background-color: rgba(255, 255, 255, 0.3);
+  /* padding: 2px; */
+  margin: 8px;
+}
+
+#sidebar {
+  position: fixed;
+  transition: all 0.3s ease;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+#sidebar.active {
+  left: -250px;
+}
+/* Page Wrapper - Sidebar Transition */
+#page-content-wrapper {
+  margin-left: 200px; 
+  transition: margin-left 0.3s ease;
+}
+
+#page-content-wrapper.sidebar-active {
+  margin-left: 0;
+}
+
+/* Top Bar Background */
+.colorset {
+  background-color: rgb(70, 138, 119);
+}
+
+/* Main Content */
+.main {
+  margin-top: -40px; 
+  padding: 35px; 
+}
+
+#toggleSidebar {
+  background-color: rgb(70, 138, 119);
+  color: white;
+  margin-left: 45px;
+  margin-top: 10px;  /* Equivalent to Bootstrap mt-2 */
+  margin-bottom: 10px;  /* Equivalent to Bootstrap mb-2 */
+  padding: 8px;
+  border: 1.5px solid white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-size: 18px;
+}
+
+/* Hover Effect */
+#toggleSidebar:hover {
+  background-color: rgb(50, 118, 99);
+  border-color: #f8f9fa;
+  transform: scale(1.05);
+}
+
+/* Active (Click) Effect */
+#toggleSidebar:active {
+  background-color: rgb(40, 108, 89); /* Even darker */
+  border-color: #d1d1d1; /* Subtle gray border */
+}
+
+
+
+@media (max-width: 768px) {
+  #sidebar {
+    left: -250px;
+  }
+
+  #sidebar.active {
+    left: 0;
+  }
+
+  #page-content-wrapper {
+    margin-left: 0;
+  }
+
+  /* #page-content-wrapper.sidebar-active {
+    margin-left: 230px;
+  } */
+}
+#sidebartitle{
+  margin-bottom: 0;
+}
+
+.imageLogo {
+  width: 55px;
+}

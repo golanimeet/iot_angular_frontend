@@ -1,0 +1,101 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title text-center fw-bold">IoT Device Dashboard</h2>
+          <p class="card-title text-center">
+            {{ activeForm === 'register' ? 'Create Your Account' : 'Login to your account' }}
+          </p>
+
+          <!-- register page -->
+          <form *ngIf="activeForm === 'register'" (ngSubmit)="registerForm()">
+            <div class="d-flex gap-3">
+              <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" placeholder="First Name" class="form-control" [(ngModel)]="registerObj.firstName"
+                  name="firstName" required />
+              </div>
+              <div class="form-group">
+                <label for="lasttName">Last Name</label>
+                <input type="text" placeholder="Last Name" class="form-control" [(ngModel)]="registerObj.lastName"
+                  name="lastName" required />
+              </div>
+            </div>
+            <div class="form-group mt-2">
+              <label for="email">Email Address</label>
+              <input type="email" placeholder="Email" class="form-control" [(ngModel)]="registerObj.email" name="email"
+                required />
+            </div>
+            <div class="form-group mt-2">
+              <label for="password">Password</label>
+              <input type="password" placeholder="Password" class="form-control" [(ngModel)]="registerObj.password"
+                name="password" required />
+            </div>
+            <div class="form-group mt-2">
+              <label for="confirmPassword">Confirm Password</label>
+              <input type="password" placeholder="Confirm Password" class="form-control"
+                [(ngModel)]="registerObj.confirmPassword" name="confirmPassword" required />
+            </div>
+            <div class="form-check mt-2">
+              <input type="checkbox" class="form-check-input" id="remember"  required />
+              <label class="form-check-label small" for="remember">I agree to the Terms of Service and Privacy
+                Policy</label>
+            </div>
+            <div class="text-center mt-3">
+              <button type="submit" class="btn btn-primary btn-block w-100">Sign In</button>
+            </div>
+            <p class="text-center mt-3">------------------- Or continue with -------------------</p>
+            <div class="text-cente d-flex gap-3">
+              <a href="https://in.linkedin.com/in/meet-golani-3a7880328" class="btn btn-outline-dark w-50">
+                <i class="fa-brands fa-linkedin" style="color: #1c1ff2; font-size: 20px;"></i>
+                LinkedIn</a>
+              <a href="https://github.com/golanimeet" class="btn btn-outline-dark w-50"><i class="fa-brands fa-github"
+                  style="font-size: 20px;"></i>
+                GitHub</a>
+            </div>
+            <p class="text-center mt-3 mb-0" (click)="toggleForm('login')">Already have an account? <a
+                class="text-decoration-none cursor">Sign In</a>
+            </p>
+          </form>
+
+
+          <!-- login page -->
+          <form *ngIf="activeForm === 'login'" (ngSubmit)="loginForm()">
+            <div class="form-group mt-3">
+              <label for="email">Email Address</label>
+              <input type="email" placeholder="Email" class="form-control" [(ngModel)]="loginObj.email" name="email"
+                required />
+            </div>
+            <div class="form-group mt-3">
+              <label for="password">Password</label>
+              <input type="password" placeholder="Password" class="form-control" [(ngModel)]="loginObj.password"
+                name="password" required />
+            </div>
+            <div class="form-group  mt-3 d-flex justify-content-between">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="remember" required />
+                <label class="form-check-label" for="remember">Remember me</label>
+              </div>
+              <a class="small text-decoration-none text-primary" routerLink="/forgot-password">Forgot password?</a>
+            </div>
+            <div class="text-center mt-3">
+              <button type="submit" class="btn btn-primary btn-block w-100">Sign In</button>
+            </div>
+            <p class="text-center mt-3">------------------- Or continue with -------------------</p>
+            <div class="text-cente d-flex gap-3">
+              <a href="https://in.linkedin.com/in/meet-golani-3a7880328" class="btn btn-outline-dark w-50"> <i
+                  class="fa-brands fa-linkedin" style="color: #1c1ff2; font-size: 20px;"></i>
+                LinkedIn</a>
+              <a href="https://github.com/golanimeet" class="btn btn-outline-dark w-50"><i class="fa-brands fa-github"
+                  style="font-size: 20px;"></i>
+                GitHub</a>
+            </div>
+            <p class="text-center mt-3 mb-0">Don't have an account? <a (click)="toggleForm('register')"
+                class="text-decoration-none cursor">Sign Up</a></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
