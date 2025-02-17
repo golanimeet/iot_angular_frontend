@@ -35,8 +35,8 @@
             </div>
             <!-- Download Buttons (Hidden Initially) -->
             <div class="text-end" *ngIf="reportGenerated">
-              <button class="btn btn-primary mx-2" (click)="downloadReport('csv')">Download CSV</button>
               <button class="btn btn-primary mx-2" (click)="downloadReport('pdf')">Download PDF</button>
+              <button class="btn btn-primary mx-2" (click)="downloadReport('csv')">Download CSV</button>
             </div>
           </form>
         </div>
@@ -45,7 +45,7 @@
   </div>
 
   <div class="row mt-4">
-    <div class="col-12">
+    <!-- <div class="col-12">
       <div class="card" *ngIf="selectedDevice">
         <div class="card-body">
           <div class="row">
@@ -63,8 +63,28 @@
           </div>
         </div>
       </div>
+    </div> -->
+    <div class="col-12">
+      <div class="card" *ngIf="selectedDevice">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12 d-flex justify-content-around">
+              <ul>
+                <li class="mb-1"><span class="fw-bold">Device ID :</span> {{ selectedDevice.id }}</li>
+                <li class="mb-1"><span class="fw-bold">Device Name :</span> {{ selectedDevice.name }}</li>
+                <li class="mb-1"><span class="fw-bold">Device Type :</span> {{ selectedDevice.type }}</li>
+              </ul>
+              <ul>
+                <li class="mb-0"><span class="fw-bold">Last Reading :</span> {{ selectedDevice.last_reading?.value || 'N/A' }} </li>
+                <li class="mb-1"><span class="fw-bold">Created At :</span> {{ selectedDevice.created_at | date: 'MMM. d, y, h:mm a' }}</li>
+                <li class="mb-0"><span class="fw-bold">Updated At :</span> {{ selectedDevice.updated_at | date: 'MMM. d, y, h:mm:ss a' }} </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
+    
     <!-- Sensor Data Report Table -->
     <div class="col-12 mt-4" *ngIf="reportData.length > 0">
       <div class="table-responsive rounded-3">

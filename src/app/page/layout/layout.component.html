@@ -16,22 +16,22 @@
       <ul class="nav flex-column mt-5">
         <li class="nav-item mb-3 navbarHover">
           <a routerLink="/dashboard" routerLinkActive="active" class="nav-link text-white">
-            <i class="fa-solid fa-house px-2"></i> Dashboard
+            <i class="fa-solid fa-house px-2 fa-xl"></i> Dashboard
           </a>
         </li>
         <li class="nav-item mb-3 navbarHover">
           <a routerLink="/device" class="nav-link text-white" routerLinkActive="active">
-            <i class="fa-solid fa-microchip px-2"></i> Manage Devices
+            <i class="fa-solid fa-microchip px-2 fa-xl"></i> Manage Devices
           </a>
         </li>
         <li class="nav-item mb-3 navbarHover">
           <a routerLink="/report" class="nav-link text-white" routerLinkActive="active">
-            <i class="fa-solid fa-file-lines px-2"></i> Generate Reports
+            <i class="fa-solid fa-file-lines px-2 fa-xl"></i> Generate Reports
           </a>
         </li>
         <li class="nav-item mb-3 navbarHover">
           <a routerLink="#" class="nav-link text-white" (click)="logoutUser()" routerLinkActive="active">
-            <i class="fa-solid fa-right-from-bracket px-2"></i> LogOut
+            <i class="fa-solid fa-right-from-bracket px-2 fa-xl"></i> LogOut
           </a>
         </li>
       </ul>
@@ -44,12 +44,12 @@
       <div class="d-flex justify-content-between w-100">
         <!-- Sidebar Toggle Button (Left Side) -->
         <button id="toggleSidebar" (click)="toggleSidebar()">
-          <i class="fa-solid fa-bars "></i>
+          <i class="fa-solid fa-bars"></i>
         </button>
     
         <!-- User Info (Right Side) -->
         <div class="d-flex align-items-center mx-3 rounded-pill userProfile">
-          <span *ngIf="loggedUser" class="fw-bold p-1"> <i class="fa-solid fa-user rounded-circle bg-light text-dark p-2 me-2"></i>{{ loggedUser.first_name }} {{ loggedUser.last_name }}</span>
+          <span *ngIf="loggedUser" class="fw-bold p-1 mx-1"> <i class="fa-solid fa-user rounded-circle bg-light text-dark p-1 me-1"></i>{{ loggedUser.first_name }} {{ loggedUser.last_name }}</span>
           <span *ngIf="!loggedUser" class="fw-bold">Guest</span>
         </div>
       </div>

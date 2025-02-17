@@ -7,14 +7,16 @@
     </div>
 
     <div class="row">
-        <div class="col-12 col-md-6 mb-2">
+        <div class="col-12 col-md-6">
             <div class="card h-100">
                 <div class="card-body flex-column justify-content-between">
                     <div class="d-flex gap-3">
                         <select class="form-select" [(ngModel)]="selectedDevice">
+                            <option value="" disabled selected>Select Device Type</option>
                             <option *ngFor="let device of devices" [value]="device.name">{{ device.name }}</option>
                         </select>
                         <select class="form-select" [(ngModel)]="dateRange">
+                            <option value="" disabled selected>Select Frequency</option>
                             <option value="daily">Daily</option>
                             <option value="weekly">Weekly</option>
                             <option value="monthly">Monthly</option>
@@ -28,7 +30,7 @@
         </div>
 
         <!-- Total Device -->
-        <div class="col-12 col-md-3 mb-2">
+        <div class="col-12 col-md-3">
             <div class="card h-100">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <p class="card-title">Total Devices</p>
@@ -41,7 +43,7 @@
         </div>
 
         <!-- Total Reports -->
-        <div class="col-12 col-md-3 mb-2">
+        <div class="col-12 col-md-3">
             <div class="card h-100">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <p class="card-title">Total Sensore Data</p>

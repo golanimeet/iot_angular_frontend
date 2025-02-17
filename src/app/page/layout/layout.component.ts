@@ -14,7 +14,7 @@ export class LayoutComponent implements OnInit {
   loggedUser: { first_name: string; last_name: string } | null = null;
   isSidebarActive: boolean = false;
 
-  constructor(private authService: AuthService, private snackBar: MatSnackBar, private router: Router) {}
+  constructor(private authService: AuthService, private snackBar: MatSnackBar, private router: Router) { }
 
   ngOnInit() {
     const userData = localStorage.getItem('user');
@@ -34,17 +34,15 @@ export class LayoutComponent implements OnInit {
     this.router.navigateByUrl('/login');
   }
 
-  
- // Detect outside clicks to close sidebar
- @HostListener('document:click', ['$event'])
- onClickOutside(event: Event) {
-   const sidebar = document.getElementById('sidebar');
-   const toggleButton = document.getElementById('toggleSidebar');
+  // Detect outside clicks to close sidebar
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event) {
+    const sidebar = document.getElementById('sidebar');
+    const toggleButton = document.getElementById('toggleSidebar');
 
-   if (sidebar && toggleButton && !sidebar.contains(event.target as Node) && !toggleButton.contains(event.target as Node)) {
-     this.isSidebarActive = false;
-   }
- }
+    if (sidebar && toggleButton && !sidebar.contains(event.target as Node) && !toggleButton.contains(event.target as Node)) {
+      this.isSidebarActive = false;
+    }
+  }
 
-  
 }

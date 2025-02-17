@@ -17,7 +17,8 @@ export class DeviceComponent implements OnInit {
   currentDeviceId: number | null | undefined = null;
   constructor(private deviceService: AuthService) { }
   created_at: string = '';  // Add this
-  updated_at: string = '';  
+  updated_at: string = '';
+
   ngOnInit(): void {
     // Fetch devices on page load
     this.deviceService.getDevices().subscribe((data: Device[]) => {
@@ -34,7 +35,7 @@ export class DeviceComponent implements OnInit {
       alert('This device add successfully');
       return;
     }
-  
+
     // Get user ID from localStorage
     const storedUser = localStorage.getItem('user');
     let userIdNumber: number | null = null;
@@ -42,12 +43,12 @@ export class DeviceComponent implements OnInit {
       const user = JSON.parse(storedUser);
       userIdNumber = user.id; // Extract the user ID
     }
-  
+
     if (!userIdNumber) {
       console.error('User ID not found in localStorage.');
       return;
     }
-  
+
     //  Include user ID in the device object
     const newDevice: Device = {
       name: this.deviceName,
@@ -56,9 +57,9 @@ export class DeviceComponent implements OnInit {
       status: 'Inactive',
       last_reading: null,
       created_at: this.created_at,  // Add this
-      updated_at: this.updated_at,  
+      updated_at: this.updated_at,
     };
-  
+
     if (this.currentDeviceId) {
       // If editing, update the device
       this.deviceService.updateDevice(this.currentDeviceId, newDevice).subscribe({
@@ -83,8 +84,8 @@ export class DeviceComponent implements OnInit {
       });
     }
   }
-  
-  
+
+
   // Fetch devices from the server
   getDevices(): void {
     this.deviceService.getDevices().subscribe((data: Device[]) => {

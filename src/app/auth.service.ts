@@ -11,22 +11,22 @@ export interface Device {
   id?: number;  // Optional for new devices
   name: string;
   type: string;
-  user: number;  // Ensure user ID is included
+  user: number;  // user ID is included
   status: string;
   last_reading: any; // Modify as per actual response type
-  created_at: string;  // Add this
+  created_at: string;
   updated_at: string;
 }
-
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
 
+export class AuthService {
   private apiUrl = 'http://127.0.0.1:8000/api'; // Django API URL
-  private tokenKey = 'access_token'; // Key for storing token in localStorage
+  private tokenKey = 'access_token'; // storing token in localStorage
   constructor(private http: HttpClient, private _router: Router) { }
+
   //register
   register(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register/`, data);
@@ -44,6 +44,20 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
   }
+  // Request Password Reset
+  requestPasswordReset(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/password-reset/`, { email });
+  }
+  // Reset Password using UID and Token
+  resetPassword(uidb64: string, token: string, newPassword: string): Observable<any> {
+    console.log('Sending data:', { uidb64, token, newPassword });  // Log to confirm the values
+    return this.http.post(`${this.apiUrl}/password-reset-confirm/`, {
+      uidb64: uidb64,
+      token: token,
+      new_password: newPassword  // This field name should be exactly 'new_password'
+    });
+  }
+
   //  user id data show
   private getAuthHeaders(): any {
     const token = this.getToken();
@@ -80,7 +94,7 @@ export class AuthService {
 
   getReportData(deviceName: string, dateRange: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/report-data/`, {
-      params: {
+      params: {       // used route parameters and capture the values
         device_name: deviceName,
         date_range: dateRange,
       },
@@ -90,21 +104,6 @@ export class AuthService {
   getDashboardStats(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/dashboard-stats/`, {
       headers: this.getAuthHeaders(),
-    });
-  }
-
-  // Request Password Reset
-  requestPasswordReset(email: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/password-reset/`, { email });
-  }
-
-  // Reset Password using UID and Token
-  resetPassword(uidb64: string, token: string, newPassword: string): Observable<any> {
-    console.log('Sending data:', { uidb64, token, newPassword });  // Log to confirm the values
-    return this.http.post(`${this.apiUrl}/password-reset-confirm/`, {
-      uidb64: uidb64,
-      token: token,
-      new_password: newPassword  // This field name should be exactly 'new_password'
     });
   }
 

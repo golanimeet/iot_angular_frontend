@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { AuthService, Device, DashboardStats } from '../../auth.service';
+import { AuthService, Device } from '../../auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 Chart.register(...registerables);
 
 @Component({
@@ -12,10 +12,10 @@ Chart.register(...registerables);
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   devices: Device[] = [];
   selectedDevice: string = '';
-  dateRange: string = 'daily';
+  dateRange: string = '';
   chart: any;
   currentDate: string = '';
   currentTime: string = '';
@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit {
   sensorData: any[] = [];
   autoUpdateInterval: any;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.updateDateTime();
@@ -32,17 +32,15 @@ export class DashboardComponent implements OnInit {
     this.getDevices();
     this.fetchDashboardStats();
 
+    // Initialize blank chart on load
     setTimeout(() => {
-      if (this.devices.length > 0) {
-        this.selectedDevice = this.devices[0].name;
-        this.fetchData();
-      }
-    }, 1000);
+      this.initializeChart([]);
+    }, 500);
 
     this.autoUpdateInterval = setInterval(() => {
       this.fetchData();
       this.fetchDashboardStats();
-    }, 5000); // Update every 60 seconds
+    }, 5000); // Update every 50 seconds
   }
 
   fetchDashboardStats(): void {
@@ -69,8 +67,18 @@ export class DashboardComponent implements OnInit {
   }
 
   fetchData(): void {
-    if (!this.selectedDevice || !this.dateRange) {
-      alert('Please select a device and date range.');
+    if (!this.selectedDevice && !this.dateRange) {
+      this.showSnackbar('Please select a device type and a date range.');
+      return;
+    }
+
+    if (!this.selectedDevice) {
+      this.showSnackbar('Please select a device type.');
+      return;
+    }
+
+    if (!this.dateRange) {
+      this.showSnackbar('Please select a date range.');
       return;
     }
 
@@ -78,89 +86,48 @@ export class DashboardComponent implements OnInit {
       (data) => {
         this.sensorData = data;
         this.updateChart(data);
+        this.showSnackbar('Chart created successfully!');
       },
       (error) => {
         console.error('Error fetching report data:', error);
+        this.showSnackbar('Failed to fetch data. Please try again.');
       }
     );
   }
 
-  updateChart(data: any[]): void {
-    if (!this.chart) {
-      this.initializeChart(data);
-      return;
-    }
-  
-    let labels: string[] = [];
-    let values: number[] = [];
-  
-    if (this.dateRange === 'daily') {
-      // Direct mapping for daily data
-      labels = data.map(entry => this.formatDateTime(entry.timestamp));
-      values = data.map(entry => entry.value);
-    } 
-    else if (this.dateRange === 'weekly') {
-      // Grouping data by day of the week
-      let weeklyData: { [key: string]: number[] } = {};
-  
-      data.forEach(entry => {
-        const day = this.formatDateTime(entry.timestamp); // "Mon", "Tue", etc.
-        if (!weeklyData[day]) {
-          weeklyData[day] = [];
-        }
-        weeklyData[day].push(entry.value);
-      });
-  
-      labels = Object.keys(weeklyData);
-      values = labels.map(day => 
-        weeklyData[day].reduce((sum, val) => sum + val, 0) / weeklyData[day].length // Average per day
-      );
-    } 
-    else if (this.dateRange === 'monthly') {
-      // Grouping data by month
-      let monthlyData: { [key: string]: number[] } = {};
-  
-      data.forEach(entry => {
-        const month = this.formatDateTime(entry.timestamp); // "Jan", "Feb", etc.
-        if (!monthlyData[month]) {
-          monthlyData[month] = [];
-        }
-        monthlyData[month].push(entry.value);
-      });
-  
-      labels = Object.keys(monthlyData);
-      values = labels.map(month => 
-        monthlyData[month].reduce((sum, val) => sum + val, 0) / monthlyData[month].length // Average per month
-      );
-    }
-  
-    // Update chart
-    this.chart.data.labels = labels;
-    this.chart.data.datasets[0].data = values;
-    this.chart.update();
+  // Snackbar function
+  showSnackbar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000, // Message disappears after 3 seconds
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      panelClass: ['snackbar-style'] // Custom styling
+    });
   }
-  
 
   initializeChart(data: any[]): void {
-    const labels = data.map(entry => this.formatDateTime(entry.timestamp));
-    const values = data.map(entry => entry.value);
-  
     const ctx = document.getElementById('chartCanvas') as HTMLCanvasElement;
+    if (!ctx) return;
+
+    if (this.chart) {
+      this.chart.destroy(); // Destroy previous chart instance before creating a new one
+    }
+
     this.chart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: labels,
+        labels: [],
         datasets: [
           {
-            label: 'Live Sensor Data',
-            data: values,
+            label: 'Sensor Data',
+            data: [],
             borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)', //  Light fill under line
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderWidth: 2,
             pointRadius: 5,
             pointHoverRadius: 7,
-            tension: 0.4, //  Makes the line smooth
-            fill: true, //  Enables area fill
+            tension: 0.4,
+            fill: true,
           },
         ],
       },
@@ -181,7 +148,7 @@ export class DashboardComponent implements OnInit {
               display: true,
               text: 'Value',
             },
-            beginAtZero: true, // Ensures chart starts from zero
+            beginAtZero: true,
           },
         },
         plugins: {
@@ -192,20 +159,87 @@ export class DashboardComponent implements OnInit {
         },
       },
     });
+
+    // If there is data, update chart
+    if (data.length > 0) {
+      this.updateChart(data);
+    }
   }
-  
+
+  updateChart(data: any[]): void {
+    if (!this.chart) {
+      this.initializeChart(data);
+      return;
+    }
+
+    let labels: string[] = [];
+    let values: number[] = [];
+
+    if (this.dateRange === 'daily') {
+      labels = data.map(entry => this.formatDateTime(entry.timestamp));
+      values = data.map(entry => entry.value);
+    }
+    else if (this.dateRange === 'weekly') {
+      let weeklyData: { [key: string]: number[] } = {};
+
+      data.forEach(entry => {
+        const day = this.formatDateTime(entry.timestamp);
+        if (!weeklyData[day]) {
+          weeklyData[day] = [];
+        }
+        weeklyData[day].push(entry.value);
+      });
+
+      labels = Object.keys(weeklyData);
+      values = labels.map(day =>
+        weeklyData[day].reduce((sum, val) => sum + val, 0) / weeklyData[day].length
+      );
+    }
+    else if (this.dateRange === 'monthly') {
+      let monthlyData: { [key: string]: number[] } = {};
+
+      data.forEach(entry => {
+        const month = this.formatDateTime(entry.timestamp);
+        if (!monthlyData[month]) {
+          monthlyData[month] = [];
+        }
+        monthlyData[month].push(entry.value);
+      });
+
+      labels = Object.keys(monthlyData);
+      values = labels.map(month =>
+        monthlyData[month].reduce((sum, val) => sum + val, 0) / monthlyData[month].length
+      );
+    }
+
+    // Update chart data
+    this.chart.data.labels = labels;
+    this.chart.data.datasets[0].data = values;
+    this.chart.update();
+  }
+
   ngOnDestroy(): void {
     clearInterval(this.autoUpdateInterval);
   }
 
-  updateDateTime(): void {
-    const now = new Date();
-    this.currentDate = this.formatDate(now);
-    this.currentTime = this.formatTime(now);
+  formatDateTime(timestamp: string): string {
+    const date = new Date(timestamp);
+
+    if (this.dateRange === 'daily') {
+      return `${date.toLocaleDateString('en-GB')}, ${this.formatTime(date)}`;
+    }
+    else if (this.dateRange === 'weekly') {
+      return date.toLocaleDateString(undefined, { weekday: 'short' });
+    }
+    else if (this.dateRange === 'monthly') {
+      return date.toLocaleDateString(undefined, { month: 'short' });
+    }
+
+    return date.toISOString();
   }
 
   formatDate(date: Date): string {
-    return date.toLocaleDateString('en-GB'); // Formats as DD/MM/YYYY
+    return date.toLocaleDateString('en-GB');
   }
 
   formatTime(date: Date): string {
@@ -214,24 +248,12 @@ export class DashboardComponent implements OnInit {
       minute: '2-digit',
       second: '2-digit',
       hour12: true,
-    }); // Formats as HH:MM:SS AM/PM
+    });
   }
 
-  formatDateTime(timestamp: string): string {
-    const date = new Date(timestamp);
-  
-    if (this.dateRange === 'daily') {
-      return `${date.toLocaleDateString('en-GB')}, ${this.formatTime(date)}`; // DD/MM/YYYY, HH:MM:SS
-    } 
-    else if (this.dateRange === 'weekly') {
-      return date.toLocaleDateString(undefined, { weekday: 'short' }); // Mon, Tue, Wed...
-    } 
-    else if (this.dateRange === 'monthly') {
-      return date.toLocaleDateString(undefined, { month: 'short' }); // Jan, Feb, Mar...
-    }
-  
-    return date.toISOString();
+  updateDateTime(): void {
+    const now = new Date();
+    this.currentDate = this.formatDate(now);
+    this.currentTime = this.formatTime(now);
   }
-  
-  
 }
