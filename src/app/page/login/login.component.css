@@ -4,7 +4,7 @@
 
 .form-group {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 .floating-label {
@@ -19,12 +19,11 @@
     top: -15px;
     padding: 0px 5px;
     left: 10px;
-    font-size: px;
     color: black;
 }
 
 .text-shadow {
-    text-shadow: 4px 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 5px 2px 4px rgba(0, 0, 0, 0.3);
 
 }
 
@@ -33,26 +32,29 @@
 }
 
 .container-fluid {
-	background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-	background-size: 400% 400%;
-	animation: gradient 15s ease infinite;
-	height: 100vh;
-    width: 100%;
+    background: linear-gradient(-10deg, #ee7752, #589179, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
     height: 100vh;
-}
-
-@keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
-}
-
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1; /* To ensure the background doesn't overlap content */
+  }
+  
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
 .card {
     background-color: #ffffff;
     border-radius: 12px;
@@ -68,7 +70,19 @@
     border-radius: 12px 12px 0 0;
 }
 
+.forgot {
+    margin-top: -17px;
+}
 
 .btn-primary:hover {
     background-color: #0056b3;
 }
+
+.toggle-password-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  

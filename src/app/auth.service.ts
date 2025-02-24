@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -101,10 +101,24 @@ export class AuthService {
     });
   }
 
-  getDashboardStats(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/dashboard-stats/`, {
-      headers: this.getAuthHeaders(),
-    });
+  // getDashboardStats(): Observable<any> {
+  //   return this.http.get<any>(`${this.apiUrl}/dashboard-stats/`, {
+  //     headers: this.getAuthHeaders(),
+  //   });
+  // }
+  
+getDashboardStats(deviceName?: string, dateRange?: string): Observable<any> {
+  let params = new HttpParams();
+  if (deviceName) {
+    params = params.set("device_name", deviceName);
+  }
+  if (dateRange) {
+    params = params.set("date_range", dateRange);
   }
 
+  return this.http.get<any>(`${this.apiUrl}/dashboard-stats/`, {
+    headers: this.getAuthHeaders(),
+    params: params
+  });
+}
 }

@@ -5,21 +5,20 @@
         <div class="card-header d-flex justify-content-center border-primary rounded-bottom">
           <img src="../assets/image/iot.png" class="imageLogo me-2" alt="IoT Logo">
           <h2 class="card-title text-center fw-bold text-shadow mt-2">IoT Device</h2>
-         </div>
+        </div>
         <div class="card-body">
-          <p class="card-title text-center">
+          <p class="card-title text-center fw-bold">
             {{ activeForm === 'register' ? 'Create Your Account' : 'Login to your account' }}
           </p>
+
           <!-- register page -->
           <form *ngIf="activeForm === 'register'" (ngSubmit)="registerForm()">
-
-            <div class="d-flex gap-3 mt-4">
+            <div class="d-flex gap-4 mt-3">
               <div class="form-group">
                 <input type="text" id="firstName" class="form-control" [(ngModel)]="registerObj.firstName"
                   name="firstName" required>
                 <label for="firstName" class="floating-label">First Name</label>
               </div>
-
               <div class="form-group">
                 <input type="text" id="lastName" class="form-control" [(ngModel)]="registerObj.lastName" name="lastName"
                   required>
@@ -27,18 +26,18 @@
               </div>
             </div>
 
-            <div class="form-group mt-2">
+            <div class="form-group">
               <input type="email" id="email" class="form-control" [(ngModel)]="registerObj.email" name="email" required>
               <label for="email" class="floating-label">Email Address</label>
             </div>
 
-            <div class="form-group mt-3">
+            <div class="form-group">
               <input type="password" id="password" class="form-control" [(ngModel)]="registerObj.password"
                 name="password" required>
               <label for="password" class="floating-label">Password</label>
             </div>
 
-            <div class="form-group mt-3">
+            <div class="form-group">
               <input type="password" id="confirmPassword" class="form-control" [(ngModel)]="registerObj.confirmPassword"
                 name="confirmPassword" required>
               <label for="confirmPassword" class="floating-label">Confirm Password</label>
@@ -48,26 +47,20 @@
               <button type="submit" class="btn btn-primary btn-block w-100">Sign In</button>
             </div>
             <p class="text-center mt-3 mb-0" (click)="toggleForm('login')">Already have an account? <a
-                class="text-decoration-none cursor">Sign In</a>
-            </p>
-
-
+                class="text-decoration-none cursor">Sign In</a></p>
           </form>
-
 
           <!-- login page -->
           <form *ngIf="activeForm === 'login'" (ngSubmit)="loginForm()">
-            <div class="form-group mt-3">
-              <input type="email" class="form-control" [(ngModel)]="loginObj.email" name="email"
-              required />
+            <div class="form-group mt-4">
+              <input type="email" class="form-control" [(ngModel)]="loginObj.email" name="email" required />
               <label for="email" class="floating-label">Email Address</label>
             </div>
-            <div class="form-group mt-3">
-              <input type="password" class="form-control" [(ngModel)]="loginObj.password"
-              name="password" required />
+            <div class="form-group">
+              <input type="password" class="form-control" [(ngModel)]="loginObj.password" name="password" required />
               <label for="password" class="floating-label">Password</label>
             </div>
-            <div class="form-group  mt-3 d-flex justify-content-end">
+            <div class="d-flex justify-content-end forgot">
               <a class="small text-decoration-none text-primary" routerLink="/forgot-password">Forgot password?</a>
             </div>
             <div class="text-center mt-3">
@@ -77,6 +70,12 @@
                 class="text-decoration-none cursor">Sign Up</a></p>
           </form>
         </div>
+      </div>
+    </div>
+    <!-- Show loading spinner while logging in -->
+    <div *ngIf="isLoading" class="d-flex justify-content-center mt-4">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
       </div>
     </div>
   </div>

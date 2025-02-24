@@ -30,7 +30,7 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.newPassword.length < 6) {
+    if (this.newPassword.length < 8) {
       this.message = 'Password must be at least 6 characters long';
       this.isError = true;
       return;

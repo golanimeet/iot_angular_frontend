@@ -23,14 +23,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
   totalSensore: number = 0;
   sensorData: any[] = [];
   autoUpdateInterval: any;
+  selectedDeviceId: number = 0;
+  selectedDeviceValue: number = 0;
 
   constructor(private authService: AuthService, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.updateDateTime();
     setInterval(() => this.updateDateTime(), 1000);
+    setInterval(() => this.fetchDashboardStats(), 1000);
     this.getDevices();
-    this.fetchDashboardStats();
 
     // Initialize blank chart on load
     setTimeout(() => {
@@ -39,22 +41,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.autoUpdateInterval = setInterval(() => {
       this.fetchData();
-      this.fetchDashboardStats();
-    }, 5000); // Update every 50 seconds
+    }, 5000); // Update every 1 seconds
   }
 
   fetchDashboardStats(): void {
-    this.authService.getDashboardStats().subscribe(
+    this.authService.getDashboardStats(this.selectedDevice, this.dateRange).subscribe(
       (stats) => {
         this.totalDevices = stats.totalDevices;
         this.totalSensore = stats.totalSensore;
+        this.selectedDeviceId = stats.selectedDeviceId;
+        this.selectedDeviceValue = stats.selectedDeviceValue;
       },
       (error) => {
-        console.error('Error fetching dashboard stats:', error);
+        console.error("Error fetching dashboard stats:", error);
       }
     );
   }
-
+  
+  onSelectionChange(): void {
+    this.fetchDashboardStats();
+  }
+  
   getDevices(): void {
     this.authService.getDevices().subscribe(
       (devices) => {
@@ -86,7 +93,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       (data) => {
         this.sensorData = data;
         this.updateChart(data);
-        this.showSnackbar('Chart created successfully!');
       },
       (error) => {
         console.error('Error fetching report data:', error);
@@ -98,7 +104,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // Snackbar function
   showSnackbar(message: string): void {
     this.snackBar.open(message, 'Close', {
-      duration: 3000, // Message disappears after 3 seconds
+      duration: 2000, // Message disappears after 2 seconds
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
       panelClass: ['snackbar-style'] // Custom styling

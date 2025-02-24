@@ -22,7 +22,7 @@
                 <div class="form-group">
                   <label for="dateRange" class="form-label">Select Device Range</label>
                   <select [(ngModel)]="dateRange" name="dateRange" id="dateRange" class="form-select" required>
-                    <option value="" selected hidden>Select Date Range</option>
+                    <option value="" selected hidden>Select Frequency</option>
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
                     <option value="monthly">Monthly</option>
@@ -45,25 +45,6 @@
   </div>
 
   <div class="row mt-4">
-    <!-- <div class="col-12">
-      <div class="card" *ngIf="selectedDevice">
-        <div class="card-body">
-          <div class="row">
-            <div class="col-12 d-flex justify-content-around">
-              <ul>
-                <li class="mb-1"><span class="fw-bold">Device Name :</span> {{ selectedDevice.name }}</li>
-                <li class="mb-1"><span class="fw-bold">Device Type :</span> {{ selectedDevice.type }}</li>
-                <li class="mb-0"><span class="fw-bold">Last Reading :</span> {{ selectedDevice.last_reading?.value || 'N/A' }} </li>
-              </ul>
-              <ul>
-                <li class="mb-1"><span class="fw-bold">Created At :</span> {{ selectedDevice.created_at | date: 'MMM. d, y, h:mm a' }}</li>
-                <li class="mb-0"><span class="fw-bold">Updated At :</span> {{ selectedDevice.updated_at | date: 'MMM. d, y, h:mm:ss a' }} </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
     <div class="col-12">
       <div class="card" *ngIf="selectedDevice">
         <div class="card-body">
@@ -84,7 +65,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Sensor Data Report Table -->
     <div class="col-12 mt-4" *ngIf="reportData.length > 0">
       <div class="table-responsive rounded-3">
@@ -99,8 +80,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of reportData; let i = index">
-              <td>{{ i + 1 }}</td>
+            <tr *ngFor="let data of reportDataForCurrentPage; let i = index">
+              <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td> <!-- Updated Sr. No. -->
               <td>{{ data.timestamp | date: 'MMM. d, y, h:mm a' }}</td>
               <td>{{ selectedDevice?.name }}</td>
               <td>{{ selectedDevice?.type }}</td>
@@ -108,8 +89,26 @@
             </tr>
           </tbody>
         </table>
+
+         <!-- Pagination -->
+        <nav *ngIf="totalPages > 1">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <a class="page-link" href="#" (click)="goToPage(currentPage - 1, $event)">Previous</a>
+            </li>
+            <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+              [class.active]="i + 1 === currentPage">
+              <a class="page-link" href="#" (click)="goToPage(i + 1, $event)">{{ i + 1 }}</a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <a class="page-link" href="#" (click)="goToPage(currentPage + 1, $event)">Next</a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
+
+
   </div>
 
 </div>

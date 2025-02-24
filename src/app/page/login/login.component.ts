@@ -24,7 +24,7 @@ export class LoginComponent {
     email: '',
     password: ''
   };
-
+  isLoading: boolean = false;  // <-- Make sure this is defined
   constructor(private authService: AuthService, private snackBar: MatSnackBar, private router: Router) {}
 
   toggleForm(form: 'login' | 'register') {
@@ -49,16 +49,19 @@ export class LoginComponent {
   }
 
   loginForm() {
+    this.isLoading = true;
     this.authService.login(this.loginObj).subscribe(
       response => {
         localStorage.setItem('access_token', response.access_token);
         localStorage.setItem('user', JSON.stringify(response.user)); // Store user info
         
         this.snackBar.open('Login successful!', 'Close', { duration: 3000 });
+        this.isLoading = false
         this.router.navigateByUrl('/dashboard');
       },  
       error => {
         this.snackBar.open('Login failed: ' + error.error.message, 'Close', { duration: 3000 });
+        this.isLoading = false;
       }
     );
   }

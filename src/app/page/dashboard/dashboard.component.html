@@ -1,14 +1,14 @@
 <div class="container">
     <div class="row">
         <!-- Date & Time -->
-        <div class="col-12 text-end mt-2">
+        <div class="col-12 text-end">
             <strong>{{ currentDate }}</strong> | <span class="text-primary">{{ currentTime }}</span>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-12 col-md-6">
-            <div class="card h-100">
+        <div class="col-12 col-md-6 p-2">
+            <div class="card selectrange">
                 <div class="card-body flex-column justify-content-between">
                     <div class="d-flex gap-3">
                         <select class="form-select" [(ngModel)]="selectedDevice">
@@ -30,36 +30,43 @@
         </div>
 
         <!-- Total Device -->
-        <div class="col-12 col-md-3">
-            <div class="card h-100">
-                <div class="card-body d-flex flex-column justify-content-between">
+        <div class="col-12 col-md-3 p-2">
+            <div class="card cardbox">
+                <div class="card-body d-flex justify-content-between cardata">
                     <p class="card-title">Total Devices</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span><i class="fa-solid fa-microchip fa-xl"></i></span>
-                        <h3 class="mb-0 fw-bold">{{ totalDevices }}</h3>
-                    </div>
+                    <h4 class="fw-bold">{{ totalDevices }}</h4>
+                </div>
+            </div>
+            <div class="card cardbox">
+                <div class="card-body d-flex justify-content-between cardata">
+                    <p class="card-title">Selected Device ID</p>
+                    <h4 class="fw-bold">{{ selectedDeviceId }}</h4>
                 </div>
             </div>
         </div>
 
         <!-- Total Reports -->
-        <div class="col-12 col-md-3">
-            <div class="card h-100">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <p class="card-title">Total Sensore Data</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span><i class="fa-solid fa-file-alt fa-xl"></i></span>
-                        <h3 class="mb-0 fw-bold">{{ totalSensore }}</h3>
-                    </div>
+        <div class="col-12 col-md-3 p-2">
+            <div class="card cardbox">
+                <div class="card-body d-flex justify-content-between cardata">
+                    <p class="card-title">Total Values</p>
+                    <h4 class="fw-bold">{{ totalSensore }}</h4>
+                </div>
+            </div>
+            <div class="card cardbox">
+                <div class="card-body d-flex justify-content-between cardata">
+                    <p class="card-title">Selected Device Value</p>
+                    <h4 class="fw-bold">{{ selectedDeviceValue }}</h4>
                 </div>
             </div>
         </div>
+
     </div>
 
     <!-- chart & data  -->
-    <div class="row">
+    <div class="row cardata">
         <!-- Chart Section -->
-        <div class="col-12 col-md-9 mt-3">
+        <div class="col-12 col-md-9 p-2">
             <div class="card p-2 h-100">
                 <h5 class="fw-bold mx-2">Device Data</h5>
                 <!-- Chart Canvas -->
@@ -68,7 +75,7 @@
         </div>
 
         <!-- Device Status Card -->
-        <div class="col-12 col-md-3 mt-3">
+        <div class="col-12 col-md-3 p-2">
             <div class="card pre-scrollable p-3 h-100">
                 <h5 class="fw-bold">Device Status</h5>
                 <div class="list-group list-group-flush">
@@ -92,14 +99,15 @@
         </div>
     </div>
 
-    <div class="row mt-4 mb-5">
+    <div class="row mb-2">
         <div class="col-12">
-            <h4 class="fw-bold">Device Datas</h4>
+            <h4 class="fw-bold mx-2">Device Data</h4>
             <div class="table-responsive rounded-3 border"
                 style="max-height: 300px; overflow-y: auto; position: relative;">
                 <table class="table table-bordered table-hover">
                     <thead class="table-secondary table-sticky">
                         <tr>
+                            <th>Sr.no</th>
                             <th>Device Name</th>
                             <th>Device Type</th>
                             <th>Device Value</th>
@@ -108,6 +116,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let entry of sensorData; let i = index">
+                            <td>{{ i + 1 }}</td>
                             <td>{{ selectedDevice }}</td>
                             <td>{{ entry.type }}</td>
                             <td>{{ entry.value }}</td>

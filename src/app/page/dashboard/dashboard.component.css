@@ -1,8 +1,17 @@
 .card {
   border-radius: 10px;
-  height: 90px;
 }
 
+.cardbox {
+  height: 50px;
+  margin-bottom: 10px;
+}
+.selectrange {
+  height: 112px;
+}
+.cardata {
+  margin-top: -7px;
+}
 canvas {
   width: 100% !important;
   height: 430px !important;
